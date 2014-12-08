@@ -1,0 +1,197 @@
+#set($dollar = '$')
+#set($colon = ':')
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>${groupId}</groupId>
+  <artifactId>${artifactId}</artifactId>
+  <version>${version}</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+
+    <!-- Quasar dependency for JDK 7 -->
+    <dependency>
+      <groupId>co.paralleluniverse</groupId>
+      <artifactId>quasar-core</artifactId>
+      <!-- Update version to suit your needs -->
+      <version>0.6.1</version>
+    </dependency>
+
+    <!-- Quasar dependency for JDK 8 -->
+    <!-- dependency>
+      <groupId>co.paralleluniverse</groupId>
+      <artifactId>quasar-core</artifactId>
+      <version>0.6.1</version>
+      <classifier>jdk8</classifier>
+    </dependency -->
+
+    <!-- JUnit dependency -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <!-- Update version to suit your needs -->
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+
+      <!-- 1.7, change according to your needs -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.2</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+
+      <!--
+          Compile-time (AOT) instrumentation, from https://github.com/puniverse/quasar/issues/53,
+          from https://github.com/dinix2008
+
+          Use _either_ compile-time (AOT) instrumentation _or_ agent-based instrumentation
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+
+          <execution>
+            <id>instrument-classes</id>
+            <phase>compile</phase>
+            <configuration>
+              <tasks>
+                <property name="ant_classpath" refid="maven.dependency.classpath"/>
+                <taskdef name="instrumentationTask" classname="co.paralleluniverse.fibers.instrument.InstrumentationTask"
+                         classpath="${ant_classpath}"/>
+                <!-- Use "allowMonitors" to allow instrumenting methods containing synchronization -->
+                <!-- instrumentationTask allowMonitors="true" -->
+                <instrumentationTask>
+                  <fileset dir="${project.build.directory}/classes/" includes="**/*.class"/>
+                </instrumentationTask>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+
+          <execution>
+            <id>instrument-test-classes</id>
+            <phase>test-compile</phase>
+            <configuration>
+              <tasks>
+                <property name="ant_classpath" refid="maven.dependency.classpath"/>
+                <taskdef name="instrumentationTask" classname="co.paralleluniverse.fibers.instrument.InstrumentationTask"
+                         classpath="${ant_classpath}"/>
+                <!-- Use "allowMonitors" to allow instrumenting methods containing synchronization -->
+                <!-- instrumentationTask allowMonitors="true" -->
+                <instrumentationTask>
+                  <fileset dir="${project.build.directory}/test-classes/" includes="**/*.class"/>
+                </instrumentationTask>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Collecting classpath entries as properties in the form groupId:artifactId:type:[classifier]
+           as per http://maven.apache.org/plugins/maven-dependency-plugin/properties-mojo.html -->
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.5.1</version>
+        <executions>
+          <execution>
+            <id>getClasspathFilenames</id>
+            <goals>
+              <goal>properties</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!--
+          Agent-based runtime instrumentation, from https://github.com/puniverse/quasar/issues/72,
+          from https://github.com/pron
+
+          Use _either_ compile-time (AOT) instrumentation _or_ agent-based instrumentation
+      -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId> <!-- Run with "mvn compile maven-dependency-plugin:properties exec:exec" -->
+        <version>1.3.2</version>
+        <configuration>
+          <mainClass>${groupId}.QuasarHelloWorld</mainClass>
+          <workingDirectory>target/classes</workingDirectory>
+          <executable>java</executable>
+          <arguments>
+            <!-- Configure memory settings as needed -->
+            <!-- argument>-Xmx1000m</argument -->
+
+            <!-- Turn off before production -->
+            <argument>-Dco.paralleluniverse.fibers.verifyInstrumentation</argument>
+
+            <!-- Enable if using compile-time (AOT) instrumentation -->
+            <!-- argument>-Dco.paralleluniverse.fibers.disableAgentWarning</argument -->
+
+            <!-- Quasar Agent for JDK 7 -->
+            <argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}</argument>
+
+            <!-- Quasar Agent for JDK 7 with "allow monitors" flag (valid for JDK 8 as well) -->
+            <!-- argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}=m</argument -->
+
+            <!-- Quasar Agent for JDK 8 -->
+            <!-- argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar${colon}jdk8}</argument -->
+
+            <!-- Classpath -->
+            <argument>-classpath</argument> <classpath/>
+
+            <!-- Main class -->
+            <argument>${groupId}.QuasarIncreasingEchoApp</argument>
+          </arguments>
+        </configuration>
+      </plugin>
+
+      <!--
+          Agent-based runtime instrumentation, for tests
+
+          Use _either_ compile-time (AOT) instrumentation _or_ agent-based instrumentation
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.9</version>
+        <configuration>
+          <!-- Configure memory settings as needed -->
+          <!-- argLine>-Xmx1000m</argLine -->
+
+          <!-- Turn off before production -->
+          <argLine>-Dco.paralleluniverse.fibers.verifyInstrumentation</argLine>
+
+          <!-- Enable if using compile-time (AOT) instrumentation -->
+          <!-- argLine>-Dco.paralleluniverse.fibers.disableAgentWarning</argLine -->
+
+          <!-- Quasar Agent for JDK 7 -->
+          <argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}</argLine>
+
+          <!-- Quasar Agent for JDK 7 with "allow monitors" flag (valid for JDK 8 as well) -->
+          <!-- argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}=m</argLine -->
+
+          <!-- Quasar Agent for JDK 8 -->
+          <!-- argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar${colon}jdk8}</argLine -->
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

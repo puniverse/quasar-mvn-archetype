@@ -1,0 +1,9 @@
+<archetype>
+  <id>quasar-maven-archetype</id>
+  <sources>
+    <source>src/main/java/QuasarIncreasingEchoApp.java</source>
+  </sources>
+  <testSources>
+    <source>src/test/java/QuasarIncreasingEchoTest.java</source>
+  </testSources>
+</archetype>
