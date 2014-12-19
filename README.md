@@ -10,7 +10,7 @@ cd quasar-mvn-archetype
 mvn install
 cd ..
 mvn archetype:generate -DarchetypeGroupId=co.paralleluniverse -DarchetypeArtifactId=quasar-mvn-archetype -DarchetypeVersion=0.1.0-SNAPSHOT -DgroupId=testgrp -DartifactId=testprj
-cd test
+cd testprj
 mvn test
 mvn clean compile dependency:properties exec:exec
 ```
