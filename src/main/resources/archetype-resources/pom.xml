@@ -180,8 +180,12 @@
             <!-- Turn off before production -->
             <!-- argument>-Dco.paralleluniverse.fibers.verifyInstrumentation</argument -->
 
-            <!-- Enable if using compile-time (AOT) instrumentation -->
+            <!-- Enable if using compile-time (AoT) instrumentation -->
+#if ($instrumentationMethod == "aot")
+            <argument>-Dco.paralleluniverse.fibers.disableAgentWarning</argument>
+#else
             <!-- argument>-Dco.paralleluniverse.fibers.disableAgentWarning</argument -->
+#end
 
 #if ($instrumentationMethod != "aot" && $javaVersion == "1.8")
             <!-- Quasar Agent for JDK 7 -->
@@ -227,8 +231,12 @@
           <!-- Turn off before production -->
           <!-- argLine>-Dco.paralleluniverse.fibers.verifyInstrumentation</argLine-->
 
-          <!-- Enable if using compile-time (AOT) instrumentation -->
+          <!-- Enable if using compile-time (AoT) instrumentation -->
+#if ($instrumentationMethod == "aot")
+          <argLine>-Dco.paralleluniverse.fibers.disableAgentWarning</argLine>
+#else
           <!-- argLine>-Dco.paralleluniverse.fibers.disableAgentWarning</argLine -->
+#end
 
 #if ($instrumentationMethod != "aot" && $javaVersion == "1.8")
           <!-- Quasar Agent for JDK 7 -->
