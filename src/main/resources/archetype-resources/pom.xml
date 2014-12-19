@@ -1,5 +1,4 @@
 #set($dollar = '$')
-#set($colon = ':')
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -189,22 +188,22 @@
 
 #if ($instrumentationMethod != "aot" && $javaVersion == "1.8")
             <!-- Quasar Agent for JDK 7 -->
-            <!-- argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}</argument-->
+            <!-- argument>-javaagent:${dollar}{co.paralleluniverse:quasar-core:jar}</argument-->
 
             <!-- Quasar Agent for JDK 8 -->
-            <argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar${colon}jdk8}</argument>
+            <argument>-javaagent:${dollar}{co.paralleluniverse:quasar-core:jar:jdk8}</argument>
 #elseif ($instrumentationMethod != "aot")
             <!-- Quasar Agent for JDK 7 -->
-            <argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}</argument>
+            <argument>-javaagent:${dollar}{co.paralleluniverse:quasar-core:jar}</argument>
 
             <!-- Quasar Agent for JDK 8 -->
-            <!-- argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar${colon}jdk8}</argument -->
+            <!-- argument>-javaagent:${dollar}{co.paralleluniverse:quasar-core:jar:jdk8}</argument -->
 #else
             <!-- Quasar Agent for JDK 7 -->
-            <!-- argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}</argument -->
+            <!-- argument>-javaagent:${dollar}{co.paralleluniverse:quasar-core:jar}</argument -->
 
             <!-- Quasar Agent for JDK 8 -->
-            <!-- argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar${colon}jdk8}</argument -->
+            <!-- argument>-javaagent:${dollar}{co.paralleluniverse:quasar-core:jar:jdk8}</argument -->
 #end
 
             <!-- Classpath -->
@@ -240,22 +239,22 @@
 
 #if ($instrumentationMethod != "aot" && $javaVersion == "1.8")
           <!-- Quasar Agent for JDK 7 -->
-          <!-- argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}</argLine-->
+          <!-- argLine>-javaagent:${dollar}{co.paralleluniverse:quasar-core:jar}</argLine-->
 
           <!-- Quasar Agent for JDK 8 -->
-          <argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar${colon}jdk8}</argLine>
+          <argLine>-javaagent:${dollar}{co.paralleluniverse:quasar-core:jar:jdk8}</argLine>
 #elseif ($instrumentationMethod != "aot")
           <!-- Quasar Agent for JDK 7 -->
-          <argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}</argLine>
+          <argLine>-javaagent:${dollar}{co.paralleluniverse:quasar-core:jar}</argLine>
 
           <!-- Quasar Agent for JDK 8 -->
-          <!-- argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar${colon}jdk8}</argLine -->
+          <!-- argLine>-javaagent:${dollar}{co.paralleluniverse:quasar-core:jar:jdk8}</argLine -->
 #else
           <!-- Quasar Agent for JDK 7 -->
-          <!-- argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}</argLine -->
+          <!-- argLine>-javaagent:${dollar}{co.paralleluniverse:quasar-core:jar}</argLine -->
 
           <!-- Quasar Agent for JDK 8 -->
-          <!-- argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar${colon}jdk8}</argLine -->
+          <!-- argLine>-javaagent:${dollar}{co.paralleluniverse:quasar-core:jar:jdk8}</argLine -->
 #end
         </configuration>
       </plugin>
