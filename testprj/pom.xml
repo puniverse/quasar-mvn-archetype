@@ -1,12 +1,10 @@
-#set($dollar = '$')
-#set($colon = ':')
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>${groupId}</groupId>
-  <artifactId>${artifactId}</artifactId>
-  <version>${version}</version>
+  <groupId>testgrp</groupId>
+  <artifactId>testprj</artifactId>
+  <version>1.0-SNAPSHOT</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -16,10 +14,8 @@
     <dependency>
       <groupId>co.paralleluniverse</groupId>
       <artifactId>quasar-core</artifactId>
-      <version>${quasarVersion}</version>
-#if ($javaVersion == "1.8")
-      <classifier>jdk8</classifier>
-#end
+      <!-- Update version to suit your needs -->
+      <version>0.6.1</version>
     </dependency>
 
     <!-- JUnit dependency -->
@@ -44,57 +40,6 @@
         </configuration>
       </plugin>
 
-#if ($instrumentationMethod == "aot")
-      <!--
-          Compile-time (AoT) instrumentation; use _either_ AoT or agent-based, not both
-      -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-
-          <execution>
-            <id>instrument-classes</id>
-            <phase>compile</phase>
-            <configuration>
-              <tasks>
-                <property name="ant_classpath" refid="maven.dependency.classpath"/>
-                <taskdef name="instrumentationTask" classname="co.paralleluniverse.fibers.instrument.InstrumentationTask"
-                         classpath="${ant_classpath}"/>
-                <!-- Use "allowMonitors" to allow instrumenting methods containing synchronization -->
-                <!-- instrumentationTask allowMonitors="true" -->
-                <instrumentationTask>
-                  <fileset dir="${project.build.directory}/classes/" includes="**/*.class"/>
-                </instrumentationTask>
-              </tasks>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-
-          <execution>
-            <id>instrument-test-classes</id>
-            <phase>test-compile</phase>
-            <configuration>
-              <tasks>
-                <property name="ant_classpath" refid="maven.dependency.classpath"/>
-                <taskdef name="instrumentationTask" classname="co.paralleluniverse.fibers.instrument.InstrumentationTask"
-                         classpath="${ant_classpath}"/>
-                <!-- Use "allowMonitors" to allow instrumenting methods containing synchronization -->
-                <!-- instrumentationTask allowMonitors="true" -->
-                <instrumentationTask>
-                  <fileset dir="${project.build.directory}/test-classes/" includes="**/*.class"/>
-                </instrumentationTask>
-              </tasks>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-#else
       <!--
           Compile-time (AoT) instrumentation; use _either_ AoT or agent-based, not both
       -->
@@ -144,7 +89,6 @@
           </execution>
         </executions>
       </plugin-->
-#end
 
       <!-- Collecting classpath entries as properties in the form groupId:artifactId:type:[classifier]
            as per http://maven.apache.org/plugins/maven-dependency-plugin/properties-mojo.html -->
@@ -167,7 +111,7 @@
         <artifactId>exec-maven-plugin</artifactId> <!-- Run with "mvn compile maven-dependency-plugin:properties exec:exec" -->
         <version>1.3.2</version>
         <configuration>
-          <mainClass>${groupId}.QuasarHelloWorld</mainClass>
+          <mainClass>testgrp.QuasarHelloWorld</mainClass>
           <workingDirectory>target/classes</workingDirectory>
           <executable>java</executable>
           <arguments>
@@ -184,31 +128,17 @@
             <!-- Enable if using compile-time (AOT) instrumentation -->
             <!-- argument>-Dco.paralleluniverse.fibers.disableAgentWarning</argument -->
 
-#if ($instrumentationMethod != "aot" && $javaVersion == "1.8")
             <!-- Quasar Agent for JDK 7 -->
-            <!-- argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}</argument-->
+            <argument>-javaagent:${co.paralleluniverse:quasar-core:jar}</argument>
 
             <!-- Quasar Agent for JDK 8 -->
-            <argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar${colon}jdk8}</argument>
-#elseif ($instrumentationMethod != "aot")
-            <!-- Quasar Agent for JDK 7 -->
-            <argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}</argument>
-
-            <!-- Quasar Agent for JDK 8 -->
-            <!-- argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar${colon}jdk8}</argument -->
-#else
-            <!-- Quasar Agent for JDK 7 -->
-            <!-- argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}</argument -->
-
-            <!-- Quasar Agent for JDK 8 -->
-            <!-- argument>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar${colon}jdk8}</argument -->
-#end
+            <!-- argument>-javaagent:${co.paralleluniverse:quasar-core:jar:jdk8}</argument -->
 
             <!-- Classpath -->
             <argument>-classpath</argument> <classpath/>
 
             <!-- Main class -->
-            <argument>${groupId}.QuasarIncreasingEchoApp</argument>
+            <argument>testgrp.QuasarIncreasingEchoApp</argument>
           </arguments>
         </configuration>
       </plugin>
@@ -231,25 +161,11 @@
           <!-- Enable if using compile-time (AOT) instrumentation -->
           <!-- argLine>-Dco.paralleluniverse.fibers.disableAgentWarning</argLine -->
 
-#if ($instrumentationMethod != "aot" && $javaVersion == "1.8")
           <!-- Quasar Agent for JDK 7 -->
-          <!-- argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}</argLine-->
+          <argLine>-javaagent:${co.paralleluniverse:quasar-core:jar}</argLine>
 
           <!-- Quasar Agent for JDK 8 -->
-          <argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar${colon}jdk8}</argLine>
-#elseif ($instrumentationMethod != "aot")
-          <!-- Quasar Agent for JDK 7 -->
-          <argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}</argLine>
-
-          <!-- Quasar Agent for JDK 8 -->
-          <!-- argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar${colon}jdk8}</argLine -->
-#else
-          <!-- Quasar Agent for JDK 7 -->
-          <!-- argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar}</argLine -->
-
-          <!-- Quasar Agent for JDK 8 -->
-          <!-- argLine>-javaagent:${dollar}{co.paralleluniverse${colon}quasar-core${colon}jar${colon}jdk8}</argLine -->
-#end
+          <!-- argLine>-javaagent:${co.paralleluniverse:quasar-core:jar:jdk8}</argLine -->
         </configuration>
       </plugin>
     </plugins>
