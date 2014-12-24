@@ -9,7 +9,7 @@ git clone https://github.com/circlespainter/quasar-mvn-archetype
 cd quasar-mvn-archetype
 mvn install
 cd ..
-mvn archetype:generate -DarchetypeGroupId=co.paralleluniverse -DarchetypeArtifactId=quasar-mvn-archetype -DarchetypeVersion=0.1.0-SNAPSHOT -DgroupId=testgrp -DartifactId=testprj
+mvn archetype:generate -DarchetypeGroupId=co.paralleluniverse -DarchetypeArtifactId=quasar-mvn-archetype -DarchetypeVersion=0.1.0 -DgroupId=testgrp -DartifactId=testprj
 cd testprj
 mvn test
 mvn clean compile dependency:properties exec:exec

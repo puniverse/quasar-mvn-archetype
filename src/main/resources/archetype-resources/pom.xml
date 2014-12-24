@@ -169,6 +169,8 @@
           <workingDirectory>target/classes</workingDirectory>
           <executable>java</executable>
           <arguments>
+            <!-- Debug --> <!-- -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -->
+
             <!-- Configure memory settings as needed -->
             <!-- argument>-Xmx1000m</argument -->
 
@@ -177,7 +179,7 @@
             -->
 
             <!-- Turn off before production -->
-            <!-- argument>-Dco.paralleluniverse.fibers.verifyInstrumentation</argument -->
+            <!-- argument>-Dco.paralleluniverse.fibers.verifyInstrumentation=true</argument -->
 
             <!-- Enable if using compile-time (AoT) instrumentation -->
 #if ($instrumentationMethod == "aot")
@@ -220,6 +222,8 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.9</version>
         <configuration>
+          <!-- Debug --> <!-- -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -->
+
           <!-- Configure memory settings as needed -->
           <!-- argLine>-Xmx1000m</argLine -->
 
@@ -228,7 +232,7 @@
           -->
 
           <!-- Turn off before production -->
-          <!-- argLine>-Dco.paralleluniverse.fibers.verifyInstrumentation</argLine-->
+          <!-- argLine>-Dco.paralleluniverse.fibers.verifyInstrumentation=true</argLine-->
 
           <!-- Enable if using compile-time (AoT) instrumentation -->
 #if ($instrumentationMethod == "aot")
