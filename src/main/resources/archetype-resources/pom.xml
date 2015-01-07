@@ -169,8 +169,10 @@
           <workingDirectory>target/classes</workingDirectory>
           <executable>java</executable>
           <arguments>
-            <!-- Debug --> <!-- -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -->
-
+            <!-- Debug -->
+            <!-- argument>-Xdebug<argument -->
+            <!-- argument>-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005<argument -->
+            
             <!-- Configure memory settings as needed -->
             <!-- argument>-Xmx1000m</argument -->
 
