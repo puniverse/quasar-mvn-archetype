@@ -21,12 +21,11 @@
 #end
     </dependency>
 
-    <!-- JUnit dependency -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <!-- Update version to suit your needs -->
-      <version>4.11</version>
+      <version>4.12</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
