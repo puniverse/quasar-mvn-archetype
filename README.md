@@ -13,6 +13,6 @@ mvn archetype:generate -DarchetypeGroupId=co.paralleluniverse -DarchetypeArtifac
 cd testprj
 mvn test
 mvn clean compile dependency:properties exec:exec
+```
 
 Other useful properties to set during project generation are `-DjavaVersion=<1.7|1.8> -DquasarVersion=<quasarVersion, e.g. 0.6.2> -DinstrumentationMethod=<agent|aot|classloader>`.
-```
