@@ -5,7 +5,7 @@ A [Parallel Universe Quasar](http://www.paralleluniverse.co/quasar/) Maven arche
 ## Getting started
 
 ```
-git clone https://github.com/circlespainter/quasar-mvn-archetype
+git clone https://github.com/puniverse/quasar-mvn-archetype
 cd quasar-mvn-archetype
 mvn install
 cd ..
