@@ -3,7 +3,7 @@
                       name="quasar-mvn-archetype">
     <requiredProperties>
         <requiredProperty key="javaVersion">
-            <defaultValue>1.7</defaultValue>
+            <defaultValue>1.8</defaultValue>
         </requiredProperty>
         <requiredProperty key="quasarVersion">
             <defaultValue>0.7.3</defaultValue>
