@@ -6,7 +6,7 @@
             <defaultValue>1.8</defaultValue>
         </requiredProperty>
         <requiredProperty key="quasarVersion">
-            <defaultValue>0.7.3</defaultValue>
+            <defaultValue>0.7.4</defaultValue>
         </requiredProperty>
         <requiredProperty key="instrumentationMethod">
             <!-- Either "agent" or "aot" -->

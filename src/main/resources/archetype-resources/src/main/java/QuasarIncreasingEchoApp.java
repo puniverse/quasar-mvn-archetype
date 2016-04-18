@@ -26,7 +26,7 @@ public class QuasarIncreasingEchoApp {
 
             int curr = 0;
             for (int i = 0; i < 10 ; i++) {
-                Fiber.sleep(1000);
+                Fiber.sleep(10);
                 System.out.println("INCREASER sending: " + curr);
                 increasingToEcho.send(curr);
                 curr = echoToIncreasing.receive();
